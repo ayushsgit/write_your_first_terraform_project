@@ -10,6 +10,11 @@
 
 terraform {
   required_version = ">= 0.12"
+  backend "s3" {
+    bucket         = "Terraform_State_File_Bucket"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-lock"
+  }
 }
 
 # ------------------------------------------------------------------------------
