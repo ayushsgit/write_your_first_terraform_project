@@ -11,8 +11,8 @@
 terraform {
   required_version = ">= 0.12"
   backend "s3" {
-    bucket         = "Terraform_State_File_Bucket"
-    region         = "us-east-1"
+    bucket         = "Terraform_State_File_Bucket" #Put the S3 bucket name you created here
+    region         = "us-east-1"                   #S3 Bucket region
     dynamodb_table = "terraform-lock"
   }
 }
@@ -21,7 +21,9 @@ terraform {
 # CONFIGURE OUR AWS CONNECTION
 # ------------------------------------------------------------------------------
 
-provider "aws" {}
+provider "aws" {
+region = "us-east-1"
+}
 
 # ------------------------------------------------------------------------------
 # CREATE THE S3 BUCKET
@@ -65,5 +67,18 @@ resource "aws_dynamodb_table" "terraform_lock" {
   attribute {
     name = "LockID"
     type = "S"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# PROVISION AN EC2 INSTANCE
+# ------------------------------------------------------------------------------
+
+resource "aws_instance" "example" {
+  ami           = "ami-0866a3c8686eaeeba" # Change to a valid AMI for your region
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "example-instance"
   }
 }
